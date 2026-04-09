@@ -1,22 +1,40 @@
 services:
+  # Servidor Nginx
+  webserver:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.nginx
+    container_name: ngzz-nginx
+    ports:
+      - "8088:80"
+    volumes:
+      - ../src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - app-network
+
   # Servidor PHP (Backend)
   app:
     build:
       context: ..
       dockerfile: docker/Dockerfile.php
     container_name: ngzz-php_app
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /var/www/html
     volumes:
       - ../src:/var/www/html
       - ./php/php.ini:/usr/local/etc/php/php.ini
-    ports:
-      - 8088:8088
+    expose:
+      - "9000"
     environment:
+      - DB_CONNECTION=mysql
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_NAME=myapp
-      - DB_USER=root
-      - DB_PASSWORD=secret
+      - DB_DATABASE=myapp
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
     depends_on:
       - mysql
     networks:
@@ -46,6 +64,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.vite
     container_name: ngzz-vite_frontend
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /var/www/html
     volumes:
       - ../src:/var/www/html

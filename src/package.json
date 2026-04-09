@@ -22,8 +22,6 @@
     },
     "dependencies": {
         "@iconify/vue": "^5.0.0",
-        "@inertiajs/inertia": "^0.11.1",
-        "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/vue3": "^2.2.18",
         "pinia": "^3.0.4"
     }
