@@ -21,6 +21,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.php
     container_name: ngzz-php_app
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /var/www/html
     volumes:
       - ../src:/var/www/html
@@ -63,6 +64,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.vite
     container_name: ngzz-vite_frontend
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /var/www/html
     volumes:
       - ../src:/var/www/html
