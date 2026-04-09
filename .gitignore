@@ -1,4 +1,5 @@
 src/.env
 src/.phpunit.result.cache
+src/public/build/
 src/node_modules/
 src/vendor/
