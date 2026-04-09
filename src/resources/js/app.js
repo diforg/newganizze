@@ -6,8 +6,8 @@ import { createApp, h } from 'vue';
 
 createInertiaApp({
 	resolve: (name) => {
-		const pages = import.meta.glob('./Pages/**/*.js', { eager: true });
-		const page = pages[`./Pages/${name}.js`];
+		const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
+		const page = pages[`./Pages/${name}.vue`];
 
 		if (!page) {
 			throw new Error(`Unknown Inertia page: ${name}`);
