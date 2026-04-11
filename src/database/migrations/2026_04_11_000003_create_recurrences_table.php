@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('recurrences', function (Blueprint $table) {
+            $table->id();
             $table->string('description', 255);
             $table->enum('frequency', ['daily', 'weekly', 'biweekly', 'monthly', 'bimonthly', 'quarterly', 'semiannual', 'yearly']);
             $table->tinyInteger('interval')->default(1);
