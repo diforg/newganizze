@@ -13,18 +13,14 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('icon')->nullable();
-            $table->integer('order')->default(0);
+            $table->string('name', 100);
+            $table->enum('type', ['checking', 'savings', 'wallet', 'credit_card', 'investment']);
+            $table->string('icon', 50);
+            $table->decimal('initial_balance', 15, 2);
+            $table->char('currency', 3)->default('BRL');
             $table->boolean('archived')->default(false);
-            $table->decimal('initial_balance', 15, 2)->default(0);
-            $table->decimal('current_balance', 15, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
-
-            // Índices
-            $table->index('archived');
-            $table->unique('name');
         });
     }
 

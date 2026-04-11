@@ -13,22 +13,19 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('icon')->nullable();
-            $table->foreignId('parent_id')
-                  ->nullable()
-                  ->constrained('categories')
-                  ->onDelete('cascade');
-            $table->integer('order')->default(0);
+            $table->string('name', 255);
+            $table->enum('nature', ['income', 'expense', 'both']);
+            $table->string('icon', 50);
+            $table->string('color', 7);
+            $table->foreignId('parent_category_id')
+                ->nullable()
+                ->constrained('categories')
+                ->nullOnDelete();
             $table->boolean('archived')->default(false);
-            $table->enum('type', ['expense', 'income']);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('parent_id');
-            $table->index('type');
-            $table->index(['type', 'archived']);
-            $table->unique(['name', 'type', 'parent_id']);
+            $table->index('parent_category_id');
         });
     }
 
