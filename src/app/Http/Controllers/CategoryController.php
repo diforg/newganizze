@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,5 +34,29 @@ class CategoryController extends Controller
             ->count();
 
         return Inertia::render('Categories/Index', compact('categories', 'archivedCount', 'activeTab'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name'               => 'required|string|max:255',
+            'nature'             => 'required|in:income,expense,both',
+            'icon'               => 'required|string|max:50',
+            'color'              => 'required|string|size:7',
+            'parent_category_id' => 'nullable|integer|exists:categories,id',
+            'archived'           => 'boolean',
+        ]);
+
+        if (!empty($validated['parent_category_id'])) {
+            $parent = Category::findOrFail($validated['parent_category_id']);
+
+            if ($parent->parent_category_id !== null) {
+                abort(422, 'Max depth exceeded');
+            }
+        }
+
+        Category::create($validated);
+
+        return to_route('categories.index', ['type' => $request->query('type', 'expense')]);
     }
 }
