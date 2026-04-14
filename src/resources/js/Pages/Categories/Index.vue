@@ -23,23 +23,25 @@ const switchTab = (type) => {
     return
   }
 
-  router.get(route('categories.index'), { type }, { preserveState: true, replace: true })
+  router.get('/categories', { type }, { preserveState: true, replace: true })
 }
 </script>
 
 <template>
   <AppLayout>
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-semibold text-gray-800">Categorias</h1>
-      <button
-        type="button"
-        class="border border-green-600 text-green-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-green-50 transition-colors"
-      >
-        + Nova categoria
-      </button>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden p-8">
+
+      <div class="flex justify-between items-center mb-6">
+      <h1 class="text-[20px] font-semibold text-gray-800">Categorias</h1>
+      <button
+          type="button"
+          class="bg-green-100 text-green-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-green-50"
+      >
+          + Nova categoria
+      </button>
+      </div>
+
       <div class="flex border-b border-gray-200">
         <button
           type="button"
