@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -59,5 +60,20 @@ class Category extends Model
     public function budgets(): HasMany
     {
         return $this->hasMany('App\\Models\\Budget');
+    }
+
+    public function scopeRoots(Builder $query): Builder
+    {
+        return $query->whereNull('parent_category_id');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('archived', false);
+    }
+
+    public function scopeArchived(Builder $query): Builder
+    {
+        return $query->where('archived', true);
     }
 }

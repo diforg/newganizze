@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -8,3 +9,5 @@ Route::get('/', function () {
         'appName' => config('app.name', 'Newganizze'),
     ]);
 });
+
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
