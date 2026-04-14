@@ -1,10 +1,16 @@
 <script setup>
+import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import CategoryCard from '@/Components/Categories/CategoryCard.vue'
+import CreateCategoryModal from '@/Components/Categories/CreateCategoryModal.vue'
 
 const props = defineProps({
   categories: {
+    type: Array,
+    default: () => [],
+  },
+  parentCategories: {
     type: Array,
     default: () => [],
   },
@@ -18,28 +24,40 @@ const props = defineProps({
   },
 })
 
-const switchTab = (type) => {
-  if (type === props.activeTab) {
-    return
-  }
+const showModal = ref(false)
 
+const newCategoryLabel = computed(() =>
+  props.activeTab === 'income' ? '+ Categoria de Receita' : '+ Categoria de Despesa'
+)
+
+const switchTab = (type) => {
+  if (type === props.activeTab) return
   router.get('/categories', { type }, { preserveState: true, replace: true })
+}
+
+const handleSubmit = (payload) => {
+  router.post('/categories', payload, {
+    preserveState: false,
+    onSuccess: () => {
+      showModal.value = false
+    },
+  })
 }
 </script>
 
 <template>
   <AppLayout>
-
     <div class="bg-white rounded-xl shadow-sm overflow-hidden p-8">
 
       <div class="flex justify-between items-center mb-6">
-      <h1 class="text-[20px] font-semibold text-gray-800">Categorias</h1>
-      <button
+        <h1 class="text-[20px] font-semibold text-gray-800">Categorias</h1>
+        <button
           type="button"
           class="bg-green-100 text-green-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-green-50"
-      >
-          + Nova categoria
-      </button>
+          @click="showModal = true"
+        >
+          {{ newCategoryLabel }}
+        </button>
       </div>
 
       <div class="flex border-b border-gray-200">
@@ -87,5 +105,14 @@ const switchTab = (type) => {
         </div>
       </div>
     </div>
+
+    <CreateCategoryModal
+      :show="showModal"
+      :active-tab="activeTab"
+      :nature="activeTab === 'income' ? 'income' : 'expense'"
+      :parent-categories="parentCategories"
+      @close="showModal = false"
+      @submit="handleSubmit"
+    />
   </AppLayout>
 </template>
